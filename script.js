@@ -3,6 +3,8 @@ let context = canvas.getContext("2d");
 
 let direction = "right";
 
+
+
 // Cada quadradinho terá 32px
 let box = 32;
 
@@ -11,6 +13,13 @@ let snake = [];
 snake[0] = {
     x:8 * box,
     y:8 * box
+}
+
+// comida
+//aleatótios tirando a parte da vírgula
+let food = {
+    x: Math.floor(Math.random() * 15 + 1) * box,
+    y: Math.floor(Math.random() * 15 + 1) * box
 }
 
 //Fundo BackGround
@@ -25,6 +34,13 @@ function criarCobrinha(){
         context.fillStyle = "green";
         context.fillRect(snake[i].x, snake[i].y, box, box);
     }
+}
+
+//Comida
+
+function drawFood(){
+    context.fillStyle = "red";
+    context.fillRect(food.x, food.y, box, box);
 }
 
 document.addEventListener("keydown", update);
@@ -44,6 +60,7 @@ function iniciarJogo(){
 
     criarBG();
     criarCobrinha();
+    drawFood();
 
     let snakeX = snake[0].x;
     let snakeY = snake[0].y;
@@ -53,7 +70,15 @@ function iniciarJogo(){
     if(direction == "up") snakeY -= box;
     if(direction == "down") snakeY += box;
 
-    snake.pop();
+    //Aumentar cobrinha
+    if (snakeX != food.x || snakeY != food.y){
+        snake.pop();
+    } else{
+        food.x = Math.floor(Math.random() * 15 + 1) * box;
+        food.y = Math.floor(Math.random() * 15 + 1) * box;
+    }
+
+    
 
     let newHead = {
         x: snakeX,
